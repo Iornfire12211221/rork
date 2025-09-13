@@ -54,9 +54,15 @@ const server = http.createServer((req, res) => {
   const parsed = url.parse(req.url || '/');
   const pathname = decodeURIComponent(parsed.pathname || '/');
 
-  if (req.method === 'HEAD' && (pathname === '/' || pathname === '/health')) {
+  // Always succeed for HEAD health checks
+  if (req.method === 'HEAD') {
     res.writeHead(200);
     return res.end();
+  }
+
+  // Instant 200 for providers checking root
+  if (pathname === '/') {
+    return send(res, 200, 'OK', { 'Content-Type': 'text/plain; charset=utf-8' });
   }
 
   if (pathname === '/health' || pathname === '/status' || pathname === '/ping') {
