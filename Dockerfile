@@ -11,16 +11,12 @@ RUN npm i --no-audit --no-fund --legacy-peer-deps
 COPY . .
 
 ENV NODE_ENV=production
-ENV EXPO_USE_FAST_RESOLVER=1
 ENV EXPO_NO_TELEMETRY=1
 ENV EXPO_NON_INTERACTIVE=1
 ENV PORT=8081
 
-# Build static web once at build time
-RUN npx expo export --platform web
-
-# Optional debug
-RUN ls -la ./dist/ || true
+# Optional debug (dist may not exist, that's OK)
+RUN ls -la ./dist/ || echo "no dist"
 
 EXPOSE 8081
 
